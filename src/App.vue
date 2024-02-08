@@ -1,75 +1,249 @@
 <template>
-  <div class="h-screen w-full bg-[#0C090A] flex justify-center items-center">
-    <div class="absolute top-0 h-full w-full flex justify-center items-center bg-[rgba(0,0,0,0.5)]" v-if="editTodoId > -1">
-      <div class="w-1/4 border-2 rounded-md border-white p-2 bg-[#0C090A]">
-      <div class="w-full flex justify-end"><button @click="handleClose()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-</svg>
-</button></div>
-      <input class="w-full bg-inherit text-white rounded-md outline-0 my-2 border-b-2 border-b-white" type="text" v-model="editTodoVal" placeholder="Enter Todo" />
-      <button class="w-full py-2 shadow-sm shadow-white text-white" @click="handleUpdateTodoValue()">Update Value</button>
+  <div class="h-screen w-full bg-[#8758FF] flex justify-center items-center">
+    <div
+      class="absolute top-0 h-full w-full flex justify-center items-center bg-[rgba(0,0,0,0.5)]"
+      v-if="editTodoId > -1"
+    >
+      <div class="w-1/4 rounded-md p-2 bg-[#1A1A40]">
+        <div class="w-full flex justify-end">
+          <button @click="handleClose()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-white"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <input
+          class="w-full bg-white border-none text-black rounded-md outline-0 my-2"
+          type="text"
+          v-model="editTodoVal"
+          placeholder="Enter Todo"
+        />
+        <button
+          class="w-full py-2 shadow-sm bg-[#8758FF] hover:bg-[#6D35D8] rounded-sm shadow-black text-white"
+          @click="handleUpdateTodoValue()"
+        >
+          UPDATE VALUE
+        </button>
       </div>
     </div>
-    <div class="absolute top-0 h-full w-full flex justify-center items-center bg-[rgba(0,0,0,0.5)]" v-if="editDoneId > -1">
-      <div class="w-1/4 border-2 rounded-md border-white p-2 bg-[#0C090A]">
-      <div class="w-full flex justify-end"><button @click="handleClose()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-</svg>
-</button></div>
-      <input class="w-full bg-inherit text-white rounded-md outline-0 my-2 border-b-2 border-b-white" type="text" v-model="editDoneVal" placeholder="Enter Todo" />
-      <button class="w-full py-2 shadow-sm shadow-white text-white" @click="handleUpdateDoneValue()">Update Value</button>
+    <div
+      class="absolute top-0 h-full w-full flex justify-center items-center bg-[rgba(0,0,0,0.5)]"
+      v-if="editDoneId > -1"
+    >
+      <div class="w-1/4 rounded-md p-2 bg-[#1A1A40]">
+        <div class="w-full flex justify-end">
+          <button @click="handleClose()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-white"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <input
+          class="w-full bg-white border-none text-black rounded-md outline-0 my-2"
+          type="text"
+          v-model="editDoneVal"
+          placeholder="Enter Todo"
+        />
+        <button
+          class="w-full py-2 shadow-sm bg-[#8758FF] hover:bg-[#6D35D8] rounded-sm shadow-black text-white"
+          @click="handleUpdateDoneValue()"
+        >
+          UPDATE VALUE
+        </button>
       </div>
     </div>
-    <div class="w-[40%] h-[60%] rounded-md shadow-md shadow-white p-2">
-    <div class="w-full h-[12%] flex justify-between">
-    <input class="w-[85%] rounded-md bg-inherit text-white" type="text" v-model="todo" placeholder="Enter Todo" />
-    <button class="w-[13%] text-white border-white hover:bg-white hover:text-black border-2 rounded-md" @click="handleAddTodo()">Add</button>
-    </div>
-    <div class="h-[90%] w-full flex py-2 justify-between">
-    <div class="h-full w-[49%] border-2 border-white rounded-md flex flex-col items-center">
-      <div class="h-[10%] w-full flex justify-center items-center"><p class="text-white">TODO</p></div>
-    <div class="h-[90%] w-[96%] overflow-y-auto" v-if="todoList.length > 0">
-      <div class="shadow-sm shadow-white p-2 my-2" v-for="e in todoList" :key="e.id">
-                <p class="text-white"> {{ e.value }} </p>
-        <div class="w-full flex justify-between items-center"><p class="text-white text-sm">{{ new Date(e.date).toLocaleDateString() }}</p>
-        <div><button @click="handleEditTodo(e.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-white">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-</svg>
-</button>
-        <button @click="handleUpdate(e.id)">Done</button>
-        <button @click="handleDeleteTodo(e.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-white">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-</svg>
-</button>
+    <div
+      class="w-[40%] h-[60%] rounded-md shadow-md bg-[#1A1A40] shadow-[#1A1A40] p-2"
+    >
+      <div class="w-full h-[12%] flex justify-between">
+        <input
+          class="w-[85%] rounded-md bg-white text-lg outline-none border-none"
+          type="text"
+          v-model="todo"
+          placeholder="Enter Todo"
+        />
+        <button
+          class="w-[13%] bg-[#8758FF] font-semibold text-white hover:bg-[#6D35D8] rounded-md"
+          @click="handleAddTodo()"
+        >
+          ADD
+        </button>
       </div>
-      </div>
-      </div>
-    </div>
-    </div>
+      <div class="h-[90%] w-full flex py-2 justify-between">
+        <div
+          class="h-full w-[49%] bg-[#1A1A40] rounded-md flex flex-col items-center"
+        >
+          <div class="h-[10%] w-full flex justify-center items-center">
+            <p class="font-semibold text-white">TODO</p>
+          </div>
+          <div
+            class="h-[90%] flex justify-center items-center w-[96%] overflow-y-auto"
+            v-if="todoList.length == 0"
+          >
+            <p class="font-semibold text-white text-xl">No Todos</p>
+          </div>
+          <div
+            class="h-[90%] w-[96%] overflow-y-auto"
+            v-if="todoList.length > 0"
+          >
+            <div
+              class="shadow-sm shadow-[#8758FF] bg-[#8758FF] rounded-md p-2 my-2"
+              v-for="e in todoList"
+              :key="e.id"
+            >
+              <p class="text-white text-lg">{{ e.value }}</p>
+              <div class="w-full flex justify-between items-center">
+                <p class="text-white text-sm">
+                  {{ new Date(e.date).toLocaleDateString() }}
+                </p>
+                <div>
+                  <button @click="handleEditTodo(e.id)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-5 h-5 text-white mx-0.5"
+                    >
+                      <path
+                        d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z"
+                      />
+                    </svg>
+                  </button>
+                  <button class="text-black" @click="handleUpdate(e.id)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-5 h-5 text-white mx-0.5"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z"
+                        clip-rule="evenodd"
+                      />
+                      <path
+                        fill-rule="evenodd"
+                        d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375Zm9.586 4.594a.75.75 0 0 0-1.172-.938l-2.476 3.096-.908-.907a.75.75 0 0 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.116-.062l3-3.75Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  <button @click="handleDeleteTodo(e.id)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-5 h-5 text-white"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <div class="h-full w-[49%] border-2 flex flex-col items-center border-white rounded-md">
-      <div class="h-[10%] w-full flex justify-center items-center"><p class="text-white">DONE</p></div>
-    <div class="h-[90%] w-[96%] overflow-y-auto"  v-if="doneList.length > 0">
-      <div class="shadow-sm shadow-white p-2 my-2" v-for="e in doneList" :key="e.id">
-        <p class="text-white line-through"> {{ e.value }} </p>
-        <div class="w-full flex justify-between items-center">
-        <p class="text-white text-sm"> {{ new Date(e.date).toLocaleDateString() }}</p>
-        <div>
-        <button @click="handleEditDone(e.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-white">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-</svg></button>
-        <button @click="handleUpdateTodo(e.id)">Todo</button>
-        <button @click="handleDeleteDone(e.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-white">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-</svg>
-</button>
-</div>
-</div>
+        <div
+          class="h-full w-[49%] flex flex-col items-center bg-[#1A1A40] rounded-md"
+        >
+          <div class="h-[10%] w-full flex justify-center items-center">
+            <p class="font-semibold text-white">DONE</p>
+          </div>
+          <div
+            class="h-[90%] flex justify-center items-center w-[96%] overflow-y-auto"
+            v-if="doneList.length == 0"
+          >
+            <p class="font-semibold text-xl text-white">No Todos Completed</p>
+          </div>
+          <div
+            class="h-[90%] w-[96%] overflow-y-auto"
+            v-if="doneList.length > 0"
+          >
+            <div
+              class="shadow-sm shadow-[#8758FF] bg-[#8758FF] rounded-md p-2 my-2"
+              v-for="e in doneList"
+              :key="e.id"
+            >
+              <p class="text-white line-through">{{ e.value }}</p>
+              <div class="w-full flex justify-between items-center">
+                <p class="text-white text-sm">
+                  {{ new Date(e.date).toLocaleDateString() }}
+                </p>
+                <div>
+                  <button @click="handleEditDone(e.id)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-5 h-5 text-white mx-0.5"
+                    >
+                      <path
+                        d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z"
+                      />
+                    </svg>
+                  </button>
+                  <button class="text-black" @click="handleUpdateTodo(e.id)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-5 h-5 text-white mx-0.5 font-semibold"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  <button @click="handleDeleteDone(e.id)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-5 h-5 text-white"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    </div>
-    </div>
-  </div>
   </div>
 </template>
 
@@ -77,85 +251,90 @@
 export default {
   data() {
     return {
-      todo: '',
+      todo: "",
       todoList: [],
       doneList: [],
       editTodoId: -1,
       editDoneId: -1,
-      editTodoVal: '',
-      editDoneVal: '',
+      editTodoVal: "",
+      editDoneVal: "",
       index: 0,
     };
   },
   methods: {
     handleAddTodo() {
-      let obj = { id: this.index, value: this.todo, date: new Date(), status: 'todo' };
+      let obj = {
+        id: this.index,
+        value: this.todo,
+        date: new Date(),
+        status: "todo",
+      };
       this.index++;
-      localStorage.setItem('indexVal', JSON.stringify(this.index));
+      localStorage.setItem("indexVal", JSON.stringify(this.index));
       let newTodoList = [...this.todoList, obj];
       this.todoList = newTodoList;
-      localStorage.setItem('todoList', JSON.stringify(newTodoList));
-      this.todo = '';
+      localStorage.setItem("todoList", JSON.stringify(newTodoList));
+      this.todo = "";
     },
-    handleEditTodo(id) { 
-      const updateIndex = this.todoList.findIndex(x => x.id == id); 
-      this.editTodoId = updateIndex; 
-      this.editTodoVal = this.todoList[updateIndex]?.value; 
+    handleEditTodo(id) {
+      const updateIndex = this.todoList.findIndex((x) => x.id == id);
+      this.editTodoId = updateIndex;
+      this.editTodoVal = this.todoList[updateIndex]?.value;
     },
-    handleEditDone(id) { 
-      const updateIndex = this.doneList.findIndex(x => x.id == id);
+    handleEditDone(id) {
+      const updateIndex = this.doneList.findIndex((x) => x.id == id);
       this.editDoneId = updateIndex;
-      this.editDoneVal = this.doneList[updateIndex]?.value; 
+      this.editDoneVal = this.doneList[updateIndex]?.value;
     },
-    handleClose() { 
+    handleClose() {
       this.editDoneId = -1;
-      this.editTodoId = -1; 
+      this.editTodoId = -1;
     },
     handleDeleteTodo(id) {
-      let updatedTodoList = this.todoList.filter(x => x.id !== id);
+      let updatedTodoList = this.todoList.filter((x) => x.id !== id);
       this.todoList = updatedTodoList;
-      localStorage.setItem('todoList', JSON.stringify(updatedTodoList));
+      localStorage.setItem("todoList", JSON.stringify(updatedTodoList));
     },
     handleDeleteDone(id) {
-      let updatedTodoList = this.doneList.filter(x => x.id !== id);
+      let updatedTodoList = this.doneList.filter((x) => x.id !== id);
       this.doneList = updatedTodoList;
-      localStorage.setItem('doneList', JSON.stringify(updatedTodoList));
+      localStorage.setItem("doneList", JSON.stringify(updatedTodoList));
     },
     handleUpdateTodoValue() {
       let updatedTodoList = [...this.todoList];
       updatedTodoList[this.editTodoId].value = this.editTodoVal;
       this.todoList = updatedTodoList;
-      localStorage.setItem('todoList', JSON.stringify(updatedTodoList));
+      localStorage.setItem("todoList", JSON.stringify(updatedTodoList));
       this.editTodoId = -1;
     },
     handleUpdateDoneValue() {
       let updatedTodoList = [...this.doneList];
       updatedTodoList[this.editDoneId].value = this.editDoneVal;
       this.doneList = updatedTodoList;
-      localStorage.setItem('doneList', JSON.stringify(updatedTodoList));
+      localStorage.setItem("doneList", JSON.stringify(updatedTodoList));
       this.editDoneId = -1;
     },
-    handleUpdate(id) { 
-      const updateIndex = this.todoList.findIndex(x => x.id == id);
+    handleUpdate(id) {
+      const updateIndex = this.todoList.findIndex((x) => x.id == id);
       this.doneList.push(this.todoList[updateIndex]);
-      const updatedTodoList = this.todoList.filter(x => x.id != id);
+      const updatedTodoList = this.todoList.filter((x) => x.id != id);
       this.todoList = updatedTodoList;
-      localStorage.setItem('todoList', JSON.stringify(updatedTodoList));
-      localStorage.setItem('doneList', JSON.stringify(this.doneList));
-    }, 
-    handleUpdateTodo(id) { 
-      const updateIndex = this.doneList.findIndex(x => x.id == id);
+      localStorage.setItem("todoList", JSON.stringify(updatedTodoList));
+      localStorage.setItem("doneList", JSON.stringify(this.doneList));
+    },
+    handleUpdateTodo(id) {
+      const updateIndex = this.doneList.findIndex((x) => x.id == id);
       this.todoList.push(this.doneList[updateIndex]);
-      const updatedDoneList = this.doneList.filter(x => x.id != id);
+      const updatedDoneList = this.doneList.filter((x) => x.id != id);
       this.doneList = updatedDoneList;
-      localStorage.setItem('todoList', JSON.stringify(this.todoList));
-      localStorage.setItem('doneList', JSON.stringify(updatedDoneList));
-    }
+      localStorage.setItem("todoList", JSON.stringify(this.todoList));
+      localStorage.setItem("doneList", JSON.stringify(updatedDoneList));
+    },
   },
   mounted() {
-    let todoItems = localStorage.getItem('todoList');
-    let doneItems = localStorage.getItem('doneList');
-    let currentIndex = localStorage.getItem('indexVal');
+    let todoItems = localStorage.getItem("todoList");
+    let doneItems = localStorage.getItem("doneList");
+    let currentIndex = localStorage.getItem("indexVal");
     if (todoItems) this.todoList = JSON.parse(todoItems);
     if (doneItems) this.doneList = JSON.parse(doneItems);
     if (currentIndex) this.index = JSON.parse(currentIndex);
