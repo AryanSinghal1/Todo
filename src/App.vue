@@ -42,7 +42,8 @@
       v-if="editDoneId > -1"
     >
       <div class="w-1/4 rounded-md p-2 bg-[#1A1A40]">
-        <div class="w-full flex justify-end">
+        <div class="w-full flex justify-between items-center">
+          <p class="text-white">Modiy Todo</p>
           <button @click="handleClose()">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +76,7 @@
       </div>
     </div>
     <div
-      class="w-[40%] h-[60%] rounded-md shadow-md bg-[#1A1A40] shadow-[#1A1A40] p-2"
+      class="w-[80%] sm:w-[70%] lg:w-[40%] h-[90%] sm:h-[80%] lg:h-[70%] rounded-md shadow-md bg-[#1A1A40] shadow-[#1A1A40] p-2"
     >
       <div class="w-full h-[12%] flex justify-between">
         <input
@@ -91,9 +92,9 @@
           ADD
         </button>
       </div>
-      <div class="h-[90%] w-full flex py-2 justify-between">
+      <div class="h-[90%] w-full flex flex-col sm:flex-row py-2 justify-between">
         <div
-          class="h-full w-[49%] bg-[#1A1A40] rounded-md flex flex-col items-center"
+          class="h-[49%] sm:h-full w-full sm:w-[49.5%] bg-[#1A1A40] rounded-md flex flex-col items-center"
         >
           <div class="h-[10%] w-full flex justify-center items-center">
             <p class="font-semibold text-white">TODO</p>
@@ -171,7 +172,7 @@
         </div>
 
         <div
-          class="h-full w-[49%] flex flex-col items-center bg-[#1A1A40] rounded-md"
+          class="h-[49%] sm:h-full w-full sm:w-[49.5%] flex flex-col items-center bg-[#1A1A40] rounded-md"
         >
           <div class="h-[10%] w-full flex justify-center items-center">
             <p class="font-semibold text-white">DONE</p>
@@ -248,6 +249,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -262,19 +264,25 @@ export default {
     };
   },
   methods: {
-    handleAddTodo() {
+    async handleAddTodo() {
       let obj = {
-        id: this.index,
         value: this.todo,
         date: new Date(),
-        status: "todo",
       };
-      this.index++;
-      localStorage.setItem("indexVal", JSON.stringify(this.index));
-      let newTodoList = [...this.todoList, obj];
-      this.todoList = newTodoList;
-      localStorage.setItem("todoList", JSON.stringify(newTodoList));
+      await axios.post("http://localhost:3000/todoList", obj);
+      const todoRes = await axios.get("http://localhost:3000/todoList");
+      this.todoList = todoRes.data;
       this.todo = "";
+    },
+    async getData() {
+      try {
+        const todoRes = await axios.get("http://localhost:3000/todoList");
+        const doneRes = await axios.get("http://localhost:3000/doneList");
+        this.todoList = todoRes.data;
+        this.doneList = doneRes.data;
+      } catch (e) {
+        console.error(e);
+      }
     },
     handleEditTodo(id) {
       const updateIndex = this.todoList.findIndex((x) => x.id == id);
@@ -290,54 +298,44 @@ export default {
       this.editDoneId = -1;
       this.editTodoId = -1;
     },
-    handleDeleteTodo(id) {
+    async handleDeleteTodo(id) {
       let updatedTodoList = this.todoList.filter((x) => x.id !== id);
       this.todoList = updatedTodoList;
-      localStorage.setItem("todoList", JSON.stringify(updatedTodoList));
+      await axios.delete(`http://localhost:3000/todoList/${id}`);
     },
-    handleDeleteDone(id) {
+    async handleDeleteDone(id) {
       let updatedTodoList = this.doneList.filter((x) => x.id !== id);
-      this.doneList = updatedTodoList;
-      localStorage.setItem("doneList", JSON.stringify(updatedTodoList));
+      this.doneList = updatedTodoList;      
+      await axios.delete(`http://localhost:3000/doneList/${id}`);
     },
-    handleUpdateTodoValue() {
-      let updatedTodoList = [...this.todoList];
-      updatedTodoList[this.editTodoId].value = this.editTodoVal;
-      this.todoList = updatedTodoList;
-      localStorage.setItem("todoList", JSON.stringify(updatedTodoList));
+    async handleUpdateTodoValue() {
+      let obj = this.todoList[this.editTodoId];
+      obj.value = this.editTodoVal;
+      await axios.put(`http://localhost:3000/todoList/${obj.id}`, obj);
       this.editTodoId = -1;
     },
-    handleUpdateDoneValue() {
-      let updatedTodoList = [...this.doneList];
-      updatedTodoList[this.editDoneId].value = this.editDoneVal;
-      this.doneList = updatedTodoList;
-      localStorage.setItem("doneList", JSON.stringify(updatedTodoList));
+    async handleUpdateDoneValue() {
+      let obj = this.doneList[this.editDoneId];
+      obj.value = this.editDoneVal;
+      await axios.put(`http://localhost:3000/doneList/${obj.id}`, obj);
+      await this.getData();
       this.editDoneId = -1;
     },
-    handleUpdate(id) {
+    async handleUpdate(id) {
       const updateIndex = this.todoList.findIndex((x) => x.id == id);
-      this.doneList.push(this.todoList[updateIndex]);
-      const updatedTodoList = this.todoList.filter((x) => x.id != id);
-      this.todoList = updatedTodoList;
-      localStorage.setItem("todoList", JSON.stringify(updatedTodoList));
-      localStorage.setItem("doneList", JSON.stringify(this.doneList));
+      await axios.post("http://localhost:3000/doneList", this.todoList[updateIndex]);
+      await axios.delete(`http://localhost:3000/todoList/${id}`);
+      await this.getData();
     },
-    handleUpdateTodo(id) {
+    async handleUpdateTodo(id) {
       const updateIndex = this.doneList.findIndex((x) => x.id == id);
-      this.todoList.push(this.doneList[updateIndex]);
-      const updatedDoneList = this.doneList.filter((x) => x.id != id);
-      this.doneList = updatedDoneList;
-      localStorage.setItem("todoList", JSON.stringify(this.todoList));
-      localStorage.setItem("doneList", JSON.stringify(updatedDoneList));
+      await axios.post("http://localhost:3000/todoList", this.doneList[updateIndex]);
+      await axios.delete(`http://localhost:3000/doneList/${id}`);
+      await this.getData();
     },
   },
   mounted() {
-    let todoItems = localStorage.getItem("todoList");
-    let doneItems = localStorage.getItem("doneList");
-    let currentIndex = localStorage.getItem("indexVal");
-    if (todoItems) this.todoList = JSON.parse(todoItems);
-    if (doneItems) this.doneList = JSON.parse(doneItems);
-    if (currentIndex) this.index = JSON.parse(currentIndex);
+    this.getData();
   },
 };
 </script>
