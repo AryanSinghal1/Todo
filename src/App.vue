@@ -5,7 +5,8 @@
       v-if="editTodoId > -1"
     >
       <div class="w-1/4 rounded-md p-2 bg-[#1A1A40]">
-        <div class="w-full flex justify-end">
+        <div class="w-full flex justify-between">
+          <p class="text-white">Modify Todo</p>
           <button @click="handleClose()">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +44,7 @@
     >
       <div class="w-1/4 rounded-md p-2 bg-[#1A1A40]">
         <div class="w-full flex justify-between items-center">
-          <p class="text-white">Modiy Todo</p>
+          <p class="text-white">Modify Todo</p>
           <button @click="handleClose()">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +104,7 @@
             class="h-[90%] flex justify-center items-center w-[96%] overflow-y-auto"
             v-if="todoList.length == 0"
           >
-            <p class="font-semibold text-white text-xl">No Todos</p>
+            <p class="font-semibold text-white text-xl">No Task To do</p>
           </div>
           <div
             class="h-[90%] w-[96%] overflow-y-auto"
@@ -181,7 +182,7 @@
             class="h-[90%] flex justify-center items-center w-[96%] overflow-y-auto"
             v-if="doneList.length == 0"
           >
-            <p class="font-semibold text-xl text-white">No Todos Completed</p>
+            <p class="font-semibold text-xl text-white">No Task Completed</p>
           </div>
           <div
             class="h-[90%] w-[96%] overflow-y-auto"

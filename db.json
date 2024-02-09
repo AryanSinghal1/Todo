@@ -1,26 +1,31 @@
 {
   "todoList": [
     {
-      "id": "ff5f",
-      "value": "as",
-      "date": "2024-02-08T19:00:41.066Z"
+      "id": "b90b",
+      "value": "Buy groceries",
+      "date": "2024-02-08T19:29:42.292Z"
     },
     {
-      "id": "6c60",
-      "value": "sg",
-      "date": "2024-02-08T19:00:43.852Z"
+      "id": "157d",
+      "value": "Go to market",
+      "date": "2024-02-08T19:29:29.029Z"
+    },
+    {
+      "id": "f5d4",
+      "value": "Do recharge",
+      "date": "2024-02-08T19:29:50.322Z"
     }
   ],
   "doneList": [
     {
-      "id": "305a",
-      "value": "sj",
-      "date": "2024-02-08T19:00:53.259Z"
+      "id": "df8d",
+      "value": "Go for a walk",
+      "date": "2024-02-08T19:30:12.643Z"
     },
     {
-      "id": "bbec",
-      "value": "shx",
-      "date": "2024-02-08T19:00:47.875Z"
+      "id": "ae93",
+      "value": "Go to gym",
+      "date": "2024-02-08T19:29:22.160Z"
     }
   ]
 }
